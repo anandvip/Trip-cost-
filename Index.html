@@ -17,4 +17,285 @@
             font-family: Arial, sans-serif;
 
             max-width: 600px;
-          
+
+            margin: 40px auto;
+
+            padding: 20px;
+
+            background-color: #f5f5f5;
+
+        }
+
+        .calculator {
+
+            background-color: white;
+
+            padding: 30px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+        h1 {
+
+            color: #2c3e50;
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+        }
+
+        .input-group {
+
+            margin-bottom: 20px;
+
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #34495e;
+
+            font-weight: bold;
+
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 10px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 5px;
+
+            font-size: 16px;
+
+            box-sizing: border-box;
+
+        }
+
+        input:focus {
+
+            outline: none;
+
+            border-color: #3498db;
+
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+
+        }
+
+        button {
+
+            background-color: #3498db;
+
+            color: white;
+
+            padding: 12px 20px;
+
+            border: none;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+
+            width: 100%;
+
+            font-size: 16px;
+
+            transition: background-color 0.3s;
+
+        }
+
+        button:hover {
+
+            background-color: #2980b9;
+
+        }
+
+        .result {
+
+            margin-top: 20px;
+
+            padding: 20px;
+
+            background-color: #f8f9fa;
+
+            border-radius: 5px;
+
+            text-align: center;
+
+            display: none;
+
+        }
+
+        .result.show {
+
+            display: block;
+
+        }
+
+        .error {
+
+            color: #e74c3c;
+
+            font-size: 14px;
+
+            margin-top: 5px;
+
+            display: none;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="calculator">
+
+        <h1>Trip Fuel Cost Calculator</h1>
+
+        
+
+        <div class="input-group">
+
+            <label for="efficiency">Vehicle Fuel Efficiency (km/l)</label>
+
+            <input type="number" id="efficiency" min="0" step="0.1" placeholder="Enter fuel efficiency">
+
+            <div class="error" id="efficiency-error">Please enter a valid fuel efficiency</div>
+
+        </div>
+
+        <div class="input-group">
+
+            <label for="price">Fuel Price (₹/liter)</label>
+
+            <input type="number" id="price" min="0" step="0.01" placeholder="Enter fuel price">
+
+            <div class="error" id="price-error">Please enter a valid fuel price</div>
+
+        </div>
+
+        <div class="input-group">
+
+            <label for="distance">Trip Distance (km)</label>
+
+            <input type="number" id="distance" min="0" step="0.1" placeholder="Enter trip distance">
+
+            <div class="error" id="distance-error">Please enter a valid distance</div>
+
+        </div>
+
+        <button onclick="calculateCost()">Calculate Cost</button>
+
+        <div class="result" id="result">
+
+            <h3>Estimated Fuel Cost</h3>
+
+            <p id="cost-value"></p>
+
+            <p id="fuel-needed"></p>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function validateInput(value, errorId) {
+
+            const error = document.getElementById(errorId);
+
+            if (value <= 0 || isNaN(value)) {
+
+                error.style.display = 'block';
+
+                return false;
+
+            }
+
+            error.style.display = 'none';
+
+            return true;
+
+        }
+
+        function calculateCost() {
+
+            const efficiency = parseFloat(document.getElementById('efficiency').value);
+
+            const price = parseFloat(document.getElementById('price').value);
+
+            const distance = parseFloat(document.getElementById('distance').value);
+
+            // Validate inputs
+
+            const isEfficiencyValid = validateInput(efficiency, 'efficiency-error');
+
+            const isPriceValid = validateInput(price, 'price-error');
+
+            const isDistanceValid = validateInput(distance, 'distance-error');
+
+            if (!isEfficiencyValid || !isPriceValid || !isDistanceValid) {
+
+                document.getElementById('result').classList.remove('show');
+
+                return;
+
+            }
+
+            // Calculate fuel needed and total cost
+
+            const fuelNeeded = distance / efficiency;
+
+            const totalCost = fuelNeeded * price;
+
+            // Display results
+
+            document.getElementById('result').classList.add('show');
+
+            document.getElementById('cost-value').textContent = 
+
+                `₹${totalCost.toFixed(2)}`;
+
+            document.getElementById('fuel-needed').textContent = 
+
+                `Fuel needed: ${fuelNeeded.toFixed(2)} liters`;
+
+        }
+
+        // Add event listeners for real-time validation
+
+        document.getElementById('efficiency').addEventListener('input', function() {
+
+            validateInput(parseFloat(this.value), 'efficiency-error');
+
+        });
+
+        document.getElementById('price').addEventListener('input', function() {
+
+            validateInput(parseFloat(this.value), 'price-error');
+
+        });
+
+        document.getElementById('distance').addEventListener('input', function() {
+
+            validateInput(parseFloat(this.value), 'distance-error');
+
+        });
+
+    </script>
+
+</body>
+
+</html>
